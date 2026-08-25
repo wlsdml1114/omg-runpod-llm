@@ -62,6 +62,22 @@ if [[ -f "$pod_dir/benchmark.sh" ]]; then
   require_text "$pod_dir/benchmark.sh" 'bench-62k 61775 128 1 1' 'long-input benchmark'
 fi
 
+serverless_dir='tutorials/02-vllm-serverless-qwen38-27b'
+if [[ -f "$serverless_dir/env.example" ]]; then
+  require_text "$serverless_dir/env.example" '^MODEL_NAME=PassingByPixels/Qwen3\.8-27B-NVFP4$' 'Serverless model ID'
+  require_text "$serverless_dir/env.example" '^MODEL_REVISION=1e5f29f3212294efdef42a873672c9bc399cae3c$' 'pinned model revision'
+fi
+if [[ -f "$serverless_dir/request-native.sh" ]]; then
+  require_text "$serverless_dir/request-native.sh" 'ENDPOINT_ID:\?Set ENDPOINT_ID' 'Endpoint ID guard'
+  require_text "$serverless_dir/request-native.sh" 'RUNPOD_API_KEY:\?Set RUNPOD_API_KEY' 'API key guard'
+  require_text "$serverless_dir/request-native.sh" '/runsync' 'native synchronous route'
+fi
+if [[ -f "$serverless_dir/request-openai.py" ]]; then
+  require_text "$serverless_dir/request-openai.py" 'required_env\("ENDPOINT_ID"\)' 'Python Endpoint ID guard'
+  require_text "$serverless_dir/request-openai.py" 'required_env\("RUNPOD_API_KEY"\)' 'Python API key guard'
+  require_text "$serverless_dir/request-openai.py" '/openai/v1/chat/completions' 'OpenAI-compatible route'
+fi
+
 while IFS= read -r path; do
   bash -n "$path"
 done < <(find . -type f -name '*.sh' -not -path './.git/*' | sort)
