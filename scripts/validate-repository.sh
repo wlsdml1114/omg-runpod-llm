@@ -78,6 +78,30 @@ if [[ -f "$serverless_dir/request-openai.py" ]]; then
   require_text "$serverless_dir/request-openai.py" '/openai/v1/chat/completions' 'OpenAI-compatible route'
 fi
 
+require_text README.md 'tutorials/01-vllm-pod-qwen38-27b/' 'Pod tutorial link'
+require_text README.md 'tutorials/02-vllm-serverless-qwen38-27b/' 'Serverless tutorial link'
+require_text README.md '영상 준비 중' 'video status'
+
+for readme in "$pod_dir/README.md" "$serverless_dir/README.md"; do
+  require_text "$readme" '검증일' 'validation date'
+  require_text "$readme" 'YouTube' 'YouTube field'
+  require_text "$readme" '종료' 'cleanup section'
+  require_text "$readme" '스토리지 비용' 'storage-cost warning'
+  require_text "$readme" 'https://docs\.runpod\.io|https://docs\.vllm\.ai' 'authoritative source'
+done
+
+require_text docs/security.md 'Runpod API key' 'Runpod API key guidance'
+require_text docs/security.md 'Hugging Face token' 'Hugging Face token guidance'
+require_text docs/security.md 'SSH private key' 'SSH key guidance'
+require_text docs/security.md 'HTTP Proxy' 'public proxy guidance'
+require_text docs/security.md 'unset' 'credential cleanup'
+
+require_text docs/troubleshooting.md 'Error 804' 'CUDA Error 804 guidance'
+require_text docs/troubleshooting.md 'ninja' 'ninja guidance'
+require_text docs/troubleshooting.md '첫 요청' 'first-request JIT guidance'
+require_text docs/troubleshooting.md 'assistant content' 'empty-content guidance'
+require_text docs/troubleshooting.md 'Serverless 요청' 'Serverless queue guidance'
+
 while IFS= read -r path; do
   bash -n "$path"
 done < <(find . -type f -name '*.sh' -not -path './.git/*' | sort)
@@ -101,6 +125,8 @@ secret_pattern='BEGIN (OPENSSH|RSA|EC|DSA) PRIVATE KEY|Authorization:[[:space:]]
 if grep -RInE \
   --exclude-dir=.git \
   --exclude='*.md' \
+  --exclude='validate-repository.sh' \
+  --exclude='repository.bats' \
   -- "$secret_pattern" "${scan_paths[@]}"; then
   echo "Potential secret or internal resource ID detected" >&2
   exit 1
