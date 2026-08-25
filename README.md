@@ -32,17 +32,6 @@ Serverless가 항상 더 빠르거나 저렴한 것은 아닙니다. GPU 재고,
 
 보안 기준은 [docs/security.md](docs/security.md), 자주 발생하는 문제는 [docs/troubleshooting.md](docs/troubleshooting.md)에서 확인할 수 있습니다.
 
-## 로컬 검증
-
-GPU나 Runpod 자격 증명 없이 공개 파일의 문법과 비밀정보 포함 여부를 검사합니다.
-
-```bash
-make test
-```
-
-이 검사는 실제 GPU 추론이나 Runpod Serverless 제어 영역을 흉내 내지 않습니다.
-
 ## 라이선스
 
 저장소의 예제 코드는 [Apache License 2.0](LICENSE)으로 배포합니다. 모델 가중치, Runpod, vLLM과 기타 의존성에는 각각의 라이선스와 이용 조건이 적용됩니다.
-

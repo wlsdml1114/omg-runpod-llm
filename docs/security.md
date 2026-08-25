@@ -24,13 +24,6 @@
 - Volume Disk와 Network Volume은 GPU가 정지해도 스토리지 비용이 계속될 수 있습니다.
 - 예제는 유료 리소스를 자동 생성하거나 삭제하지 않습니다.
 
-## 공개 전 검사
+## 공개 전 확인
 
-```bash
-make test
-git diff --check
-git status --short
-```
-
-검사 통과가 Runpod 계정 설정이나 외부 보안을 보증하지는 않습니다. 공개 전 GitHub의 secret scanning도 함께 사용하세요.
-
+커밋 전에 `git diff`와 `git status`를 확인하고 GitHub의 secret scanning을 함께 사용하세요. 문법 검사가 Runpod 계정 설정이나 외부 보안을 보증하지는 않습니다.
