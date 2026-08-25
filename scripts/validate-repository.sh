@@ -28,6 +28,40 @@ for path in "${required_files[@]}"; do
   fi
 done
 
+require_text() {
+  local path="$1" pattern="$2" label="$3"
+  if ! grep -qE -- "$pattern" "$path"; then
+    echo "Missing $label in $path" >&2
+    exit 1
+  fi
+}
+
+pod_dir='tutorials/01-vllm-pod-qwen38-27b'
+if [[ -f "$pod_dir/bootstrap.sh" ]]; then
+  require_text "$pod_dir/bootstrap.sh" 'vllm==0\.27\.1' 'pinned vLLM version'
+  require_text "$pod_dir/bootstrap.sh" 'flashinfer-python>=0\.6\.13' 'FlashInfer dependency'
+  require_text "$pod_dir/bootstrap.sh" 'nvidia-cutlass-dsl>=4\.5\.2' 'CUTLASS DSL dependency'
+fi
+if [[ -f "$pod_dir/serve.sh" ]]; then
+  require_text "$pod_dir/serve.sh" 'gittensor-model-hub/Qwen3\.8-27B-NVFP4-RTX5090' 'Pod model ID'
+  require_text "$pod_dir/serve.sh" '--quantization modelopt' 'ModelOpt quantization'
+  require_text "$pod_dir/serve.sh" '--kv-cache-dtype fp8' 'FP8 KV cache'
+  require_text "$pod_dir/serve.sh" '--max-model-len 262144' '262K model length'
+  require_text "$pod_dir/serve.sh" '--reasoning-parser qwen3' 'Qwen reasoning parser'
+  require_text "$pod_dir/serve.sh" '--tool-call-parser qwen3_xml' 'Qwen tool parser'
+fi
+if [[ -f "$pod_dir/smoke-test.sh" ]]; then
+  require_text "$pod_dir/smoke-test.sh" '/v1/models' 'readiness endpoint'
+  require_text "$pod_dir/smoke-test.sh" 'enable_thinking: false' 'thinking-off request'
+  require_text "$pod_dir/smoke-test.sh" 'request first' 'first request'
+  require_text "$pod_dir/smoke-test.sh" 'request warm' 'warm request'
+fi
+if [[ -f "$pod_dir/benchmark.sh" ]]; then
+  require_text "$pod_dir/benchmark.sh" 'bench-c1 512 128 10 1' 'concurrency-one benchmark'
+  require_text "$pod_dir/benchmark.sh" 'bench-c4 512 128 20 4' 'concurrency-four benchmark'
+  require_text "$pod_dir/benchmark.sh" 'bench-62k 61775 128 1 1' 'long-input benchmark'
+fi
+
 while IFS= read -r path; do
   bash -n "$path"
 done < <(find . -type f -name '*.sh' -not -path './.git/*' | sort)
