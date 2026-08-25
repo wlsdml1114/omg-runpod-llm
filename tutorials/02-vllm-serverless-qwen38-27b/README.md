@@ -14,7 +14,7 @@ Pod 편과 같은 Qwen3.8-27B NVFP4 기반이지만 체크포인트 저장소는
 
 ## 1. vLLM Worker 배포
 
-1. Runpod Hub에서 `runpod-workers/worker-vllm`을 엽니다.
+1. [Runpod Hub에서 vLLM Worker](https://console.runpod.io/hub/listing/runpod-workers/worker-vllm)를 엽니다.
 2. 촬영 또는 배포 당일 release가 Qwen3.8, ModelOpt NVFP4, CUDA 13과 RTX 5090을 지원하는지 확인합니다.
 3. GPU pool에서 RTX 5090 한 장을 선택합니다.
 4. `env.example`의 공개 Worker 환경변수를 Runpod 설정에 옮깁니다.
@@ -89,4 +89,3 @@ https://api.runpod.ai/v2/ENDPOINT_ID/openai/v1/chat/completions
 - [vLLM 환경변수](https://docs.runpod.io/serverless/vllm/environment-variables)
 - [OpenAI 호환 API](https://docs.runpod.io/serverless/vllm/openai-compatibility)
 - [Qwen3.8-27B 공식 모델 카드](https://huggingface.co/Qwen/Qwen3.8-27B)
-

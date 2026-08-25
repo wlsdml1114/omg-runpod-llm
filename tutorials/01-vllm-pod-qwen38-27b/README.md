@@ -11,11 +11,15 @@ RTX 5090 한 장에서 Qwen3.8-27B NVFP4를 vLLM OpenAI 호환 API로 실행합�
 
 ## 1. Runpod 설정
 
+[RTX 5090 Pod 템플릿으로 배포하기](https://console.runpod.io/deploy?template=mrs9dd60cx&ref=wvzldlmr)
+
+> 위 링크에는 OhMyGPU 추천인 코드가 포함되어 있습니다. 템플릿 화면이 열리면 배포 전에 아래 설정과 현재 시간당 가격을 다시 확인하세요.
+
 배포 직전 공유 템플릿의 현재 이미지와 허용 CUDA 버전을 다시 확인하세요.
 
 | 항목 | 설정 |
 |---|---|
-| Template | `mrs9dd60cx` |
+| Template | [`mrs9dd60cx`](https://console.runpod.io/deploy?template=mrs9dd60cx&ref=wvzldlmr) |
 | Cloud | Secure Cloud |
 | GPU | RTX 5090 × 1 |
 | 검증 이미지 | `runpod/pytorch:1.1.0-cu1300-torch291-ubuntu2404` |

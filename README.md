@@ -11,6 +11,13 @@ OhMyGPU의 Runpod 기반 오픈소스 LLM 배포 실습 자료입니다. 영상�
 | 01 | [Pod에서 vLLM 서빙](tutorials/01-vllm-pod-qwen38-27b/) | Qwen3.8-27B NVFP4 | RTX 5090 × 1 | 2026-08-16 | 영상 준비 중 |
 | 02 | [Serverless에서 vLLM 서빙](tutorials/02-vllm-serverless-qwen38-27b/) | Qwen3.8-27B NVFP4 | RTX 5090 × 1 | 2026-08-24 | 영상 준비 중 |
 
+## 바로 시작하기
+
+- [RTX 5090 Pod 템플릿으로 배포](https://console.runpod.io/deploy?template=mrs9dd60cx&ref=wvzldlmr)한 뒤 [Pod 튜토리얼](tutorials/01-vllm-pod-qwen38-27b/)을 순서대로 진행합니다.
+- [Runpod Hub의 vLLM Worker 열기](https://console.runpod.io/hub/listing/runpod-workers/worker-vllm)에서 Endpoint를 만든 뒤 [Serverless 튜토리얼](tutorials/02-vllm-serverless-qwen38-27b/)을 진행합니다.
+
+> Pod 템플릿 링크에는 OhMyGPU 추천인 코드가 포함되어 있습니다. 템플릿은 시작점을 빠르게 맞추기 위한 것이므로, 배포 버튼을 누르기 전에 현재 이미지, GPU, 디스크, 포트와 시간당 가격을 다시 확인하세요.
+
 ## 무엇이 다른가요?
 
 | 기준 | Pod | Serverless |
