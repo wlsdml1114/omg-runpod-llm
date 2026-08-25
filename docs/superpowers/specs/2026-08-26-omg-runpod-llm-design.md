@@ -128,17 +128,19 @@ It then explains prerequisites, repository safety rules, and the difference betw
 
 Repository validation is deterministic and runs without a GPU or Runpod credentials.
 
-The test suite first defines the expected public contract, then implementation is added until it passes. It checks:
+The test suite first defines the expected public contract, then implementation is added until it passes. These are offline repository checks, not an attempt to emulate Runpod Serverless. It checks:
 
 1. Required files and tutorial directories exist.
 2. Shell scripts pass `bash -n`.
 3. Python examples compile with `python3 -m py_compile` without executing network requests.
 4. Pod scripts contain the pinned model, vLLM version, NVFP4 quantization, FP8 KV cache, thinking-off smoke request, and readiness polling.
-5. Serverless examples require credentials from environment variables and contain the pinned model revision.
+5. Serverless examples require credentials from environment variables, contain the pinned model revision, and use valid JSON/Python syntax.
 6. No tracked file contains private-key blocks, bearer-token values, or known live resource IDs from internal evidence.
 7. READMEs contain validation dates, cleanup instructions, storage-cost warnings, and source links.
 
 `make test` runs the complete repository contract. If Bats is unavailable, `scripts/validate-repository.sh` remains the dependency-light validation entry point and is also invoked by the Bats suite.
+
+Live Serverless verification stays intentionally small: submit one cold request, submit one warm request when capacity permits, confirm `COMPLETED` plus nonempty assistant output, and record `delayTime` and `executionTime`. The tutorial does not add load testing, autoscaling tests, or a local mock of Runpod's control plane.
 
 ## Versioning and Publishing
 
