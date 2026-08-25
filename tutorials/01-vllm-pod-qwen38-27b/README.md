@@ -31,7 +31,7 @@ Pod의 SSH 터미널에서 저장소를 `/workspace`에 복제합니다.
 
 ```bash
 cd /workspace
-git clone https://github.com/OWNER/omg-runpod-llm.git
+git clone https://github.com/wlsdml1114/omg-runpod-llm.git
 cd omg-runpod-llm/tutorials/01-vllm-pod-qwen38-27b
 ```
 
@@ -104,4 +104,3 @@ API_KEY="YOUR_VLLM_API_KEY" \
 - [vLLM OpenAI 호환 서버](https://docs.vllm.ai/en/latest/serving/openai_compatible_server/)
 - [Runpod 포트 노출](https://docs.runpod.io/pods/configuration/expose-ports)
 - [Runpod 스토리지 유형](https://docs.runpod.io/pods/storage/types)
-
