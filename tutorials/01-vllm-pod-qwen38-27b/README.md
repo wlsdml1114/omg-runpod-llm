@@ -72,15 +72,23 @@ GitHub 공개 전 로컬 파일로 실습한다면 이 폴더의 네 스크립�
 
 스크립트는 `/v1/models`가 준비될 때까지 최대 30분 동안 폴링한 뒤 같은 요청을 두 번 보냅니다. Qwen3.8의 thinking을 명시적으로 끄고 HTTP 200과 비어 있지 않은 assistant content를 모두 확인합니다.
 
-외부 Proxy도 확인하려면 인증 구성을 먼저 완료한 뒤 다음처럼 실행합니다.
+`./smoke-test.sh`는 Pod 내부의 두 번째 SSH 터미널에서 실행합니다. 외부 Proxy 연결은 **사용자 로컬 PC 터미널**에서 다음처럼 한 번만 확인합니다.
 
 ```bash
-BASE_URL="https://YOUR_POD_ID-8000.proxy.runpod.net" \
-API_KEY="YOUR_VLLM_API_KEY" \
-./smoke-test.sh
+curl -sS "https://YOUR_POD_ID-8000.proxy.runpod.net/v1/chat/completions" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "model": "gittensor-model-hub/Qwen3.8-27B-NVFP4-RTX5090",
+    "messages": [
+      {"role": "user", "content": "Reply with exactly: OK"}
+    ],
+    "temperature": 0,
+    "max_tokens": 16,
+    "chat_template_kwargs": {"enable_thinking": false}
+  }'
 ```
 
-인증 없이 `8000/http`를 공개 상태로 장시간 운영하지 마세요.
+응답의 `choices[0].message.content`를 확인합니다. 위 기본 구성은 vLLM API 인증을 설정하지 않으므로 `8000/http`를 공개 상태로 장시간 운영하지 말고, 확인이 끝나면 Pod를 정지하세요.
 
 ## 6. 선택 사항: 벤치마크
 
