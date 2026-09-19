@@ -29,6 +29,15 @@ OhMyGPU의 Runpod 기반 오픈소스 LLM 배포 실습 자료입니다. 영상�
 
 Serverless가 항상 더 빠르거나 저렴한 것은 아닙니다. GPU 재고, 최소 Worker, idle timeout, 모델 크기와 실제 트래픽을 함께 확인하세요.
 
+## OhMyGPU Runpod 저장소
+
+| 저장소 | 다루는 내용 |
+| --- | --- |
+| **OMG Runpod LLM** | Pod·Serverless 기반 오픈소스 LLM 배포와 서빙 |
+| [OMG Runpod Media](https://github.com/wlsdml1114/omg-runpod-media) | 이미지·영상 생성, ComfyUI 워크플로, 생성 시간·VRAM·출력 검증 |
+
+두 저장소는 같은 방식으로 GPU, 실행 환경, 검증일과 측정 범위를 기록합니다. 이미지·영상 모델을 찾는다면 OMG Runpod Media에서 시작하세요.
+
 ## 시작하기 전에
 
 - Runpod 계정과 사용 가능한 크레딧이 필요합니다.
