@@ -1,0 +1,12 @@
+{
+  "requests": [
+    {
+      "label": "smoke",
+      "start_after_seconds": 0,
+      "prompt": "Reply with exactly: OK",
+      "max_tokens": 16,
+      "ignore_eos": false,
+      "timeout_seconds": 120
+    }
+  ]
+}

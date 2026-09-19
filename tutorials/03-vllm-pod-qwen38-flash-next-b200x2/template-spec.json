@@ -1,0 +1,55 @@
+{
+  "name": "qwen38-envelope-b200x2-nvfp4-qualification",
+  "category": "NVIDIA",
+  "image": "vllm/vllm-openai@sha256:0aea30240f3e3d9ffae8526643950e170eb5fa07fc427016a9dd90892afa2aa3",
+  "container_disk_gb": 250,
+  "persistent_volume_gb": 0,
+  "ports": [
+    "8000/http"
+  ],
+  "environment": {
+    "HF_HOME": "/workspace/.cache/huggingface",
+    "TORCHINDUCTOR_CACHE_DIR": "/workspace/.cache/torchinductor",
+    "VLLM_CACHE_ROOT": "/workspace/.cache/vllm"
+  },
+  "required_pod_environment": {
+    "VLLM_API_KEY": "<inject-one-time-secret-at-template-creation>"
+  },
+  "docker_start_args": [
+    "Inferact/Qwen3.8-Flash-Next-NVFP4",
+    "--revision",
+    "103a7608316173ca6edd49929544244de7ffda70",
+    "--host",
+    "0.0.0.0",
+    "--port",
+    "8000",
+    "--served-model-name",
+    "qwen3.8-flash-next-nvfp4",
+    "--tensor-parallel-size",
+    "2",
+    "--distributed-executor-backend",
+    "mp",
+    "--dtype",
+    "bfloat16",
+    "--quantization",
+    "modelopt_fp4",
+    "--gpu-memory-utilization",
+    "0.90",
+    "--max-model-len",
+    "32768",
+    "--max-num-batched-tokens",
+    "4096",
+    "--max-num-seqs",
+    "4",
+    "--no-enable-prefix-caching",
+    "--no-enable-flashinfer-autotune",
+    "--language-model-only",
+    "--generation-config",
+    "vllm",
+    "--reasoning-parser",
+    "qwen3",
+    "--enable-auto-tool-choice",
+    "--tool-call-parser",
+    "qwen3_coder"
+  ]
+}

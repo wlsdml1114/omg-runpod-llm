@@ -1,0 +1,19 @@
+{
+  "input": {
+    "openai_route": "/v1/chat/completions",
+    "openai_input": {
+      "model": "Qwen/Qwen3.8-27B-FP8",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Reply with exactly: OK"
+        }
+      ],
+      "max_tokens": 16,
+      "temperature": 0,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    }
+  }
+}

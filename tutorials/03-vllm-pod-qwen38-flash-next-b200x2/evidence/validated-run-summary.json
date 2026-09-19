@@ -1,0 +1,77 @@
+{
+  "run_id": "b200x2-nvfp4",
+  "final_pod_status": "EXITED",
+  "cloud": "SECURE",
+  "data_center": "US-NC-2",
+  "hourly_gpu_cost_usd": 13.58,
+  "gpu": {
+    "type": "NVIDIA B200",
+    "count": 2,
+    "memory_total_mib_per_gpu": 183359,
+    "idle_memory_used_mib_per_gpu_after_benchmark": 118998
+  },
+  "model": {
+    "repository": "Inferact/Qwen3.8-Flash-Next-NVFP4",
+    "revision": "103a7608316173ca6edd49929544244de7ffda70",
+    "checkpoint_size_gib": 170.23,
+    "detected_quantization": "modelopt_fp4",
+    "detected_checkpoint_format": "ModelOpt NVFP4",
+    "moe_backend": "FLASHINFER_TRTLLM"
+  },
+  "runtime": {
+    "image": "vllm/vllm-openai@sha256:0aea30240f3e3d9ffae8526643950e170eb5fa07fc427016a9dd90892afa2aa3",
+    "vllm_version": "0.1.dev20073+g8e685d198",
+    "model_runner": "V2",
+    "tensor_parallel_size": 2,
+    "max_model_len": 32768,
+    "gpu_memory_utilization": 0.9,
+    "ple_cpu_offload": false,
+    "prefix_cache": false,
+    "model_loading_memory_gib_per_gpu": 85.34,
+    "model_loading_seconds_rank0": 262.91,
+    "torch_compile_seconds": 49.15,
+    "initial_profile_seconds": 8.08,
+    "consumed_memory_gib_per_gpu": 86.05,
+    "peak_activation_gib_per_gpu": 47.8,
+    "cuda_graph_memory_gib_per_gpu": 0.25,
+    "kv_cache_gib_per_gpu": 26.67,
+    "kv_cache_tokens": 1952545,
+    "max_32768_token_concurrency_reported": 59.59
+  },
+  "functional_gate": {
+    "startup": "pass",
+    "native_nvfp4_backend": "pass",
+    "compiled_path": "pass",
+    "cuda_graph_capture": "pass",
+    "authenticated_models": 200,
+    "unauthenticated_models": 401,
+    "smoke": "pass",
+    "repeat_suite_count": 2,
+    "post_second_long_smoke": "pass",
+    "oom_or_worker_restart_observed": false
+  },
+  "benchmark": {
+    "pass1": {
+      "c1_median_decode_tokens_per_second": 173.9857920978923,
+      "c4_median_aggregate_tokens_per_second": 311.9035444016016,
+      "c1_median_ttft_seconds": 1.3013309156522155,
+      "c4_median_ttft_seconds": 1.2938946662470698,
+      "long_prompt_tokens": [7124, 21345]
+    },
+    "pass2": {
+      "c1_median_decode_tokens_per_second": 174.784297718422,
+      "c4_median_aggregate_tokens_per_second": 349.707676187424,
+      "c1_median_ttft_seconds": 1.3518828758969903,
+      "c4_median_ttft_seconds": 0.9069878538139164,
+      "long_prompt_tokens": [7124, 21345]
+    }
+  },
+  "comparison_to_b200x2_fp8": {
+    "weights_memory_reduction_gib_per_gpu": 0.76,
+    "peak_activation_reduction_gib_per_gpu": 23.27,
+    "kv_cache_increase_gib_per_gpu": 24.5,
+    "pass2_c1_decode_speedup_ratio": 1.2018,
+    "pass2_c4_aggregate_speedup_ratio": 1.116
+  },
+  "interpretation": "On the pinned B200 x2 stack, native NVFP4 with TP2 and PLE disabled passed the compiled path and repeated long-context gate. Most of the memory advantage came from a 23.27 GiB lower peak activation, not from the 0.76 GiB lower resident weight memory. This isolates the prior B200 x1 hang to the TP1/PLE/ModelRunner-V1 path or its surrounding runtime conditions rather than proving a general NVFP4 failure."
+}

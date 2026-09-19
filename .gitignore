@@ -8,7 +8,10 @@ __pycache__/
 .vscode/
 results/
 evidence/
+!tutorials/03-vllm-pod-qwen38-flash-next-b200x2/evidence/
+!tutorials/03-vllm-pod-qwen38-flash-next-b200x2/evidence/validated-run-summary.json
+!tutorials/04-vllm-serverless-cold-start-cache/evidence/
+!tutorials/04-vllm-serverless-cold-start-cache/evidence/observed-comparison.json
 .cache/
 model/
 models/
-

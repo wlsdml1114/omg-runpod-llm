@@ -10,6 +10,8 @@ OhMyGPU의 Runpod 기반 오픈소스 LLM 배포 실습 자료입니다. 영상�
 |---|---|---|---|---|---|
 | 01 | [Pod에서 vLLM 서빙](tutorials/01-vllm-pod-qwen38-27b/) | Qwen3.8-27B NVFP4 | RTX 5090 × 1 | 2026-08-16 | 영상 준비 중 |
 | 02 | [Serverless에서 vLLM 서빙](tutorials/02-vllm-serverless-qwen38-27b/) | Qwen3.8-27B NVFP4 | RTX 5090 × 1 | 2026-08-24 | 영상 준비 중 |
+| 03 | [Qwen3.8 Flash Next NVFP4 운영 한계 측정](tutorials/03-vllm-pod-qwen38-flash-next-b200x2/) | Qwen3.8 Flash Next NVFP4 | B200 × 2 | 2026-08-30 | 영상 준비 중 |
+| 04 | [Network Volume으로 vLLM 콜드스타트 캐시하기](tutorials/04-vllm-serverless-cold-start-cache/) | Qwen3.8-27B FP8 | H100 NVL × 1 | 2026-08-24 | 영상 준비 중 |
 
 ## 바로 시작하기
 
