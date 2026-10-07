@@ -1,11 +1,11 @@
 # 02. Runpod Serverless에서 Qwen3.8-27B NVFP4 서빙
 
 - **상태:** 검증됨
-- **검증일:** 2026-08-24
+- **검증일:** 2026-10-02 (최초 2026-08-24)
 - **YouTube:** 영상 준비 중
 - **모델:** `PassingByPixels/Qwen3.8-27B-NVFP4`
 - **고정 revision:** `1e5f29f3212294efdef42a873672c9bc399cae3c`
-- **검증 Worker:** `runpod-workers/worker-vllm:v2.25.2`
+- **검증 Worker:** `runpod-workers/worker-vllm` v2.28.0 (vLLM 0.30.0)
 - **GPU pool:** RTX 5090 / `ADA_32_PRO`, CUDA 13.0
 
 Runpod Hub의 vLLM Worker로 Qwen3.8-27B NVFP4 Serverless Endpoint를 만들고 Native API와 OpenAI 호환 API로 호출합니다.
@@ -18,8 +18,13 @@ Pod 편과 같은 Qwen3.8-27B NVFP4 기반이지만 체크포인트 저장소는
 2. 촬영 또는 배포 당일 release가 Qwen3.8, ModelOpt NVFP4, CUDA 13과 RTX 5090을 지원하는지 확인합니다.
 3. GPU pool에서 RTX 5090 한 장을 선택합니다.
 4. `env.example`의 공개 Worker 환경변수를 Runpod 설정에 옮깁니다.
-5. Minimum Workers 0, Maximum Workers 1로 시작합니다.
-6. 데모용 idle timeout은 5초를 사용할 수 있지만 실제 서비스에서는 콜드 스타트 허용 범위에 맞게 조정합니다.
+5. Active workers(최소 Worker) 0, Max workers 1로 시작합니다. 콘솔에서는 최소 Worker 수가 **Active workers**라는 이름으로 표시됩니다.
+6. 2026-10-02 검증에서는 idle timeout 60초, FlashBoot 끔으로 사용했습니다. 실제 서비스에서는 콜드 스타트 허용 범위에 맞게 조정합니다.
+
+### RTX 5090에서 메모리 설정
+
+`env.example`은 RTX 5090 32GB 한 장에서 **짧은 API 시연**이 되도록 맞춘 값입니다(`MAX_MODEL_LEN=32768`, `GPU_MEMORY_UTILIZATION=0.88`, `MAX_NUM_SEQS=8`, `ENFORCE_EAGER=true`).
+이전 가이드 값(`GPU_MEMORY_UTILIZATION=0.97`, 기본 max seqs 256, 긴 컨텍스트)으로 배포했을 때는 CUDA 그래프 준비 단계에서 OOM이 나고 Worker가 재시작을 반복했습니다. 긴 컨텍스트나 CUDA 그래프를 켠 구성은 이 GPU에서 검증하지 않았습니다.
 
 `ENDPOINT_ID`와 `RUNPOD_API_KEY`는 Worker 환경변수로 올리지 않습니다. 두 값은 로컬 요청 클라이언트에서만 사용합니다.
 
@@ -27,7 +32,7 @@ Network Volume을 쓰지 않는다면 `/runpod-volume` 캐시 설정을 그대�
 
 ## 2. UI에서 첫 요청
 
-Requests 탭에 `smoke-input.json` 내용을 붙여넣고 실행합니다. 응답에서 다음을 확인합니다.
+Requests 탭에 `smoke-input.json` 내용을 붙여넣고 실행합니다. Native 요청 본문은 `input`으로 한 번 감싸야 하며, `smoke-input.json`은 이미 감싼 형태입니다. 응답에서 다음을 확인합니다.
 
 - 상태가 `COMPLETED`인가
 - output이 비어 있지 않은가
@@ -72,12 +77,20 @@ https://api.runpod.ai/v2/ENDPOINT_ID/openai/v1/chat/completions
 2. Worker가 살아 있는 동안 같은 요청을 한 번 더 보냅니다.
 3. 두 요청의 `delayTime`, `executionTime`, 결과를 기록합니다.
 
-검증 실험에서는 첫 작업이 완료됐지만 GPU 큐 대기와 Worker 초기화 시간이 길었습니다. 두 번째 실험은 연결된 Network Volume의 데이터 센터에서 RTX 5090을 할당하지 못해 취소했습니다. Serverless가 항상 즉시 시작되거나 더 저렴하다고 해석하지 마세요.
+2026-10-02 검증(각 1회 관측값, 평균이나 보장값이 아님):
+
+| 요청 | delayTime | executionTime |
+|---|---|---|
+| 설정 수정 후 새 Worker가 처리한 요청 | 186.7초 (약 3분 7초) | 0.458초 |
+| 같은 Worker에 이어서 보낸 요청 | 3.6초 | 0.443초 |
+
+실행 시간은 둘 다 0.4초대였고, 차이는 Worker 준비와 큐 대기에서 났습니다. 이전 가이드 값으로 OOM·재시작이 반복될 때의 첫 요청은 약 25분이 걸렸는데, 이는 설정 오류가 섞인 시간이라 콜드 스타트 수치로 보지 않습니다.
+2026-08-24 실험에서는 연결된 Network Volume의 데이터 센터에서 RTX 5090을 할당하지 못한 경우도 있었습니다. Serverless가 항상 즉시 시작되거나 더 저렴하다고 해석하지 마세요.
 
 ## 6. 종료
 
-1. 테스트 후 Endpoint의 활성 Worker 수를 확인합니다.
-2. Minimum Workers가 0인지 확인합니다.
+1. 테스트 후 Endpoint의 실행 중인 Worker 수가 0인지 확인합니다.
+2. Active workers(최소 Worker)가 0인지 확인합니다.
 3. 더 이상 사용하지 않을 Endpoint와 Network Volume은 Runpod 콘솔에서 소유권과 보존 필요성을 확인한 뒤 정리합니다.
 4. Worker가 0이어도 Network Volume에는 별도 스토리지 비용이 발생할 수 있습니다.
 5. 로컬 셸에서 `unset RUNPOD_API_KEY ENDPOINT_ID`를 실행합니다.
